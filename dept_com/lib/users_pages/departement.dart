@@ -1,6 +1,5 @@
 // ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers
 
-import 'package:dept_com/users_pages/additional_pages/administration.dart';
 import 'package:dept_com/users_pages/additional_pages/plan.dart';
 import 'package:dept_com/users_pages/additional_pages/presentation.dart';
 import 'package:dept_com/users_pages/additional_pages/staff/staff.dart';
@@ -94,6 +93,7 @@ class _StudentPageState extends State<StudentPage> {
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
+                        SizedBox(height: 05),
                         ChapterCard(
                           key: UniqueKey(),
                           name: "Presentation",
@@ -107,19 +107,7 @@ class _StudentPageState extends State<StudentPage> {
                             );
                           },
                         ),
-                        ChapterCard(
-                          key: UniqueKey(),
-                          name: "Administration",
-                          tag: "shows the departement administration",
-                          press: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => Administration(),
-                              ),
-                            );
-                          },
-                        ),
+                        
                         ChapterCard(
                           key: UniqueKey(),
                           name: "Staff",

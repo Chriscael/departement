@@ -24,7 +24,7 @@ class _StudentDashboardPageState extends State<StudentDashboardPage> {
     //   route: ReceiptGenerator(),
     // ),
     MenuItem(
-      image: AssetImage("assets/images/46.jpeg"),
+      image: AssetImage("assets/images/36.gif"),
       title: 'Create Receipt',
       route: ReceiptView(),
     ),

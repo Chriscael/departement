@@ -45,6 +45,7 @@ class _ReceiptViewState extends State<ReceiptView> {
           receipts = data.map((item) => item as Map<String, dynamic>).toList();
         });
       } else {
+        print('Failed to load data: ${response.body}');
         throw Exception('Failed to load data: ${response.body}');
       }
     } catch (error) {
@@ -90,7 +91,7 @@ class _ReceiptViewState extends State<ReceiptView> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color.fromARGB(255, 93, 47, 47),
+            Colors.white,
             Color(0xFF363f93),
           ],
           begin: Alignment.topRight,
@@ -101,6 +102,9 @@ class _ReceiptViewState extends State<ReceiptView> {
         backgroundColor: Colors.transparent,
         appBar: AppBar(
           title: Text('Receipt View'),
+          backgroundColor: Color(0xFF363f93),
+          centerTitle: true,
+          foregroundColor: Colors.white,
         ),
         body: Center(
           child: receipts.isEmpty
@@ -128,7 +132,7 @@ class _ReceiptViewState extends State<ReceiptView> {
                                 'Operation Number: ${receipt['operationNumber']}'),
                             Text('Amount: ${receipt['amount']}'),
                             Text('Merchant Name: ${receipt['merchantName']}'),
-                            Text('School Signature: ${receipt['schoolSignature']}'), // Add this line
+                            //Text('School Signature: ${receipt['schoolSignature']}'), // Add this line
                             SizedBox(height: 10),
                           ],
                         ),

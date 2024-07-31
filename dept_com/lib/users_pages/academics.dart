@@ -3,7 +3,6 @@
 import 'package:dept_com/users_pages/additional_pages/actualite.dart';
 import 'package:dept_com/users_pages/additional_pages/articles/organisation.dart';
 import 'package:dept_com/users_pages/additional_pages/entreprise.dart';
-import 'package:dept_com/users_pages/additional_pages/pdf/receipt_view.dart';
 import 'package:dept_com/users_pages/additional_pages/articles/mission.dart';
 import 'package:dept_com/users_pages/additional_pages/plan.dart';
 import 'package:flutter/cupertino.dart';
@@ -20,19 +19,6 @@ class AcademicsPage extends StatefulWidget {
 class _AcademicsPageState extends State<AcademicsPage> {
   @override
   Widget build(BuildContext context) {
-
-    final List<TechnicItem> techs = [
-      TechnicItem(
-        AssetImage("assets/images/36.gif"),
-        'Reçu',
-        () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ReceiptView(),
-          ),
-        ),
-      ),
-    ];
 
     final List<MenuItem> items = [
       MenuItem(
@@ -197,53 +183,7 @@ class _AcademicsPageState extends State<AcademicsPage> {
               },
             ),
             SizedBox(height: 10),
-            Text(
-              'Utile',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            SizedBox(height: 10),
-            GridView.builder(
-              shrinkWrap: true,
-              physics: BouncingScrollPhysics(),
-              itemCount: techs.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 1,
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 0.5,
-                  mainAxisSpacing: 0.5),
-              itemBuilder: (BuildContext context, int index) {
-                return SafeArea(
-                  child: CupertinoButton(
-                    child: Container(
-                      height: 300,
-                      width: 300,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: techs[index].image,
-                          fit: BoxFit.cover,
-                        ),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Container(
-                        margin: EdgeInsets.fromLTRB(15, 15, 0, 0),
-                        child: Text(
-                          techs[index].title,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ),
-                    onPressed: () => techs[index].navigateToNextPage(context),
-                  ),
-                );
-              },
-            ),
+            
           ],
         ),
       ),

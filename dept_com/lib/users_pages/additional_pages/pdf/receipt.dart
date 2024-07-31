@@ -6,6 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+
+
 class ReceiptGenerator extends StatefulWidget {
   ReceiptGenerator({Key? key}) : super(key: key);
 
@@ -32,7 +34,8 @@ class _ReceiptGeneratorState extends State<ReceiptGenerator> {
     'merchantName': TextEditingController(),
   };
 
-  Future<void> _selectDate(BuildContext context, TextEditingController controller) async {
+  Future<void> _selectDate(
+      BuildContext context, TextEditingController controller) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -58,7 +61,8 @@ class _ReceiptGeneratorState extends State<ReceiptGenerator> {
     return null;
   }
 
-  Widget buildDateFormField(String labelText, TextEditingController controller) {
+  Widget buildDateFormField(
+      String labelText, TextEditingController controller) {
     return TextFormField(
       controller: controller,
       decoration: InputDecoration(
@@ -91,7 +95,8 @@ class _ReceiptGeneratorState extends State<ReceiptGenerator> {
     );
   }
 
-  Widget buildTextFormField(String labelText, String hintText, {bool isEmail = false}) {
+  Widget buildTextFormField(String labelText, String hintText,
+      {bool isEmail = false}) {
     return TextFormField(
       controller: _controllers[labelText],
       decoration: InputDecoration(
@@ -142,54 +147,55 @@ class _ReceiptGeneratorState extends State<ReceiptGenerator> {
   }
 
   Future<void> _sendMessage() async {
-  if (_formKey.currentState!.validate()) {
-    final receiptData = {
-      'fullName': _controllers['FullName']!.text,
-      'emailAddress': _controllers['E-Mail Address']!.text,
-      'subject': _controllers['Subject']!.text,
-      'agency': _controllers['agency']!.text,
-      'currency': _controllers['currency']!.text,
-      'reason': _controllers['reason']!.text,
-      'phoneNumber': _controllers['phoneNumber']!.text,
-      'operationNumber': _controllers['operationNumber']!.text,
-      'amount': double.tryParse(_controllers['amount']!.text),
-      'date': _controllers['date']!.text, // Date is already in correct format
-      'merchantName': _controllers['merchantName']!.text,
-      'qrCode': _qrCodeData,
-    };
+    if (_formKey.currentState!.validate()) {
+      final receiptData = {
+        'fullName': _controllers['FullName']!.text,
+        'emailAddress': _controllers['E-Mail Address']!.text,
+        'subject': _controllers['Subject']!.text,
+        'agency': _controllers['agency']!.text,
+        'currency': _controllers['currency']!.text,
+        'reason': _controllers['reason']!.text,
+        'phoneNumber': _controllers['phoneNumber']!.text,
+        'operationNumber': _controllers['operationNumber']!.text,
+        'amount': double.tryParse(_controllers['amount']!.text),
+        'date': _controllers['date']!.text, // Date is already in correct format
+        'merchantName': _controllers['merchantName']!.text,
+        'qrCode': _qrCodeData,
+      };
 
-    try {
-      final token = await storage.read(key: 'jwt'); // Read the stored token
-      if (token == null) {
-        throw 'Token is null. Please log in again.';
-      }
-      final response = await http.post(
-        Uri.parse('http://127.0.0.1:8000/receipts/submitreceipt'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token', // Include the token in the headers
-        },
-        body: jsonEncode(receiptData),
-      );
+      try {
+        final token = await storage.read(key: 'jwt'); // Read the stored token
+        if (token == null) {
+          throw 'Token is null. Please log in again.';
+        }
+        final response = await http.post(
+          Uri.parse('http://127.0.0.1:8000/submitreceipt'),
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization':
+                'Bearer $token', // Include the token in the headers
+          },
+          body: jsonEncode(receiptData),
+        );
 
-      if (response.statusCode == 201) {
+        if (response.statusCode == 201) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Receipt submitted successfully!')),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to submit receipt')),
+          );
+          print('Failed to submit receipt: ${response.body}');
+        }
+      } catch (error) {
+        print('Error occurred: $error');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Receipt submitted successfully!')),
+          SnackBar(content: Text('An error occurred: $error')),
         );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to submit receipt')),
-        );
-        print('Failed to submit receipt: ${response.body}');
       }
-    } catch (error) {
-      print('Error occurred: $error');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred: $error')),
-      );
     }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -205,9 +211,10 @@ class _ReceiptGeneratorState extends State<ReceiptGenerator> {
         ),
       ),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text('Contact'),
+          title: Text('GR'),
+          foregroundColor: Colors.white,
           backgroundColor: Color(0xFF363f93),
           centerTitle: true,
         ),
@@ -223,9 +230,12 @@ class _ReceiptGeneratorState extends State<ReceiptGenerator> {
                   children: [
                     buildTextFormField('FullName', 'Enter your fullname'),
                     SizedBox(height: 16),
-                    buildTextFormField('E-Mail Address', 'Enter your email address', isEmail: true),
+                    buildTextFormField(
+                        'E-Mail Address', 'Enter your email address',
+                        isEmail: true),
                     SizedBox(height: 16),
-                    buildTextFormField('Subject', 'Enter the reason for this contact'),
+                    buildTextFormField(
+                        'Subject', 'Enter the reason for this contact'),
                     SizedBox(height: 16),
                     buildTextFormField('agency', 'Enter the agency'),
                     SizedBox(height: 16),
@@ -235,13 +245,15 @@ class _ReceiptGeneratorState extends State<ReceiptGenerator> {
                     SizedBox(height: 16),
                     buildTextFormField('phoneNumber', 'Enter the phone number'),
                     SizedBox(height: 16),
-                    buildTextFormField('operationNumber', 'Enter the operation number'),
+                    buildTextFormField(
+                        'operationNumber', 'Enter the operation number'),
                     SizedBox(height: 16),
                     buildTextFormField('amount', 'Enter the amount'),
                     SizedBox(height: 16),
                     buildDateFormField('Date', _controllers['date']!),
                     SizedBox(height: 16),
-                    buildTextFormField('merchantName', 'Enter the merchant name'),
+                    buildTextFormField(
+                        'merchantName', 'Enter the merchant name'),
                     SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: _generateQRCode,
@@ -260,7 +272,7 @@ class _ReceiptGeneratorState extends State<ReceiptGenerator> {
                     SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: _sendMessage,
-                      child: Text('SEND MESSAGE'),
+                      child: Text('Create Your Receipt'),
                     ),
                   ],
                 ),
